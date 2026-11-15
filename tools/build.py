@@ -48,7 +48,7 @@ GAMES = [
                     "Dig and Build, a 3D sandbox for little kids",
                     "Driving 3D toy trains"]),
     dict(slug="dino-smash-city", name="Dino Smash City", pkg="com.tinytapkids.dinosmash", status="live", audience="kids",
-         tags=["No ads", "Optional contribution"],
+         tags=["No ads"],
          desc="Go GIANT! Stomp around a toy city as a friendly dino: kick, grab, go bowling, pop barrels, dress up your dinos and collect stickers.",
          shots=3, shot_orient="landscape",
          shot_alts=["Kicking a stack of crates as a T. rex", "Going giant in the toy city", "Dressing up the dinos"]),
