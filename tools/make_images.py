@@ -1,34 +1,106 @@
-"""Builds the site's images (webp) from the game folders.
-Run from anywhere:  python tools/make_images.py
-Source paths are relative to the GPlay Games folder (two levels up)."""
+"""Builds the site's web images (icons, banners, screenshots) as compressed WebP.
+
+    python tools/make_images.py
+
+Icons are saved at 512px, screenshots with a long edge of 1080px.
+Studio logo, favicons and social.jpg are left alone unless --studio is passed.
+"""
 import os
 from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SITE = os.path.dirname(HERE)
-GAMES = os.path.dirname(SITE)
 OUT = os.path.join(SITE, "img")
-os.makedirs(OUT, exist_ok=True)
+SHOTS = os.path.join(OUT, "shots")
+os.makedirs(SHOTS, exist_ok=True)
 
+ICON_SIZE = 512
 BANNER = (1024, 500)
+SHOT_LONG = 1080
 
-# slug: (icon source, banner source, optional banner crop box)
-SOURCES = {
-    "kaiju-rampage": ("Kaiju Rampage/Kaiju Rampage 512 icon.png", "Kaiju Rampage/Kaiju Rampage feature graphic.png", None),
-    "brick-blast-rocket": ("Brick Blast/icon-512.png", "Brick Blast/Feature graphic.png", None),
-    "kids-fun-games": ("Kids Fun Games 1.9/icon-512-play.png", "Kids Fun Games 1.9/kids-fun-games-1.9-store-graphics/graphics/feature-graphic-1024x500.png", None),
-    "dino-smash-city": ("Dino Smash City/App icon.png", "Dino Smash City/Feature graphic.png", None),
-    "christmas-town-fun": ("Christmas Town Fun/store/icon-512.png", "Christmas Town Fun/store/feature-graphic-1024x500.png", None),
-    "deep-glow": ("Deep Glow/store/icon-512.png", "Deep Glow/store/feature-graphic-1024x500.png", None),
-    "fudders-ngmi": ("fudders-ngmi-1.0.0-source/fudders-ngmi/android/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
-                     "fudders-ngmi-1.0.0-source/fudders-ngmi/store-listing/1.2.0/feature-graphic-1024x500.png", None),
-    "ink-heroes": ("Ink Heroes/assets/icon/icon_1024.png", "Ink Heroes/art-src/intro/heroes_notebook.png", (0, 71, 1920, 1008)),
-    "stick-city-z": ("Stick City Z/assets/icon/icon_foreground.png", "Stick City Z/real_city_rooftops.png", (100, 150, 1180, 677)),
+# slug: (icon source, banner source)
+ICONS_BANNERS = {
+    "kaiju-rampage": (
+        "/tmp/kaiju-store/icon-512.png",
+        "/tmp/kaiju-store/feature-graphic-1024x500.png",
+    ),
+    "brick-blast-rocket": (
+        "/workspace/brick-blast-rocket/store/graphics/icon-512.png",
+        "/workspace/brick-blast-rocket/store/graphics/feature-graphic-1024x500.png",
+    ),
+    "kids-fun-games": (
+        "/workspace/kids-games/store-listing/icon-512-play.png",
+        "/workspace/kids-games/store-listing/feature-graphic-1024x500-v2.png",
+    ),
+    "dino-smash-city": (
+        "/workspace/dino-smash/store-listing/v1.3/icon-512-play.png",
+        "/workspace/dino-smash/store-listing/v1.3/feature-graphic-1024x500.png",
+    ),
+    "christmas-town-fun": (
+        "/workspace/christmas-town-fun/assets/ui/icon.png",
+        None,  # keep existing banner
+    ),
+    "deep-glow": (None, None),  # keep existing art (no local store kit on the box)
+    "fudders-ngmi": (
+        "/workspace/fudders-ngmi/store-listing/icon-512-play.png",
+        "/workspace/fudders-ngmi/store-listing/1.0.0/feature-graphic-1024x500.png",
+    ),
+    "ink-heroes": (
+        "/workspace/ink-heroes-icons-v2/icon-B-hero-squad-cobalt-1024.png",
+        "/workspace/ink-heroes-store/graphics/feature-graphic-1024x500.png",
+    ),
+    "stick-city-z": (
+        "/workspace/stick-city-z-store-kit/play-icon-512.png",
+        "/workspace/stick-city-z-store-kit/feature-graphic-1024x500.png",
+    ),
+}
+
+# slug: list of up to 3 screenshot source paths
+SCREENSHOTS = {
+    "kaiju-rampage": [
+        "/tmp/kaiju-store/phone-1-become-the-kaiju.png",
+        "/tmp/kaiju-store/phone-3-defeat-giant-bosses.png",
+        "/tmp/kaiju-store/phone-6-smash-the-army.png",
+    ],
+    "brick-blast-rocket": [
+        "/workspace/brick-blast-rocket/store/graphics/phone-1-aim-and-shoot.png",
+        "/workspace/brick-blast-rocket/store/graphics/phone-3-wingman.png",
+        "/workspace/brick-blast-rocket/store/graphics/phone-6-world-map.png",
+    ],
+    "kids-fun-games": [
+        "/workspace/kids-fun-games-release-2.0/screenshots/01-home-no-locks.png",
+        "/workspace/kids-games/store-listing/v1.9/graphics/phone/02-dig-build-big-world.png",
+        "/workspace/kids-games/store-listing/v1.9/graphics/phone/04-toy-trains-3d.png",
+    ],
+    "dino-smash-city": [
+        "/workspace/dino-smash/store-listing/v1.3/phone/01-kick.png",
+        "/workspace/dino-smash/store-listing/v1.3/phone/02-giant.png",
+        "/workspace/dino-smash/store-listing/v1.3/phone/06-dressup.png",
+    ],
+    "christmas-town-fun": [
+        "/workspace/ctf-trailer-stills/01-title.png",
+        "/workspace/ctf-trailer-stills/02-sleigh.png",
+        "/workspace/ctf-trailer-stills/05-games-grid.png",
+    ],
+    "fudders-ngmi": [
+        "/workspace/fudders-ngmi/store-listing/1.0.0/phone-screenshots/01-crybaby-hub.png",
+        "/workspace/fudders-ngmi/store-listing/1.0.0/phone-screenshots/02-crybaby-tear-flood.png",
+        "/workspace/fudders-ngmi/store-listing/1.0.0/phone-screenshots/08-boss-diamond-hands-colossus.png",
+    ],
+    "ink-heroes": [
+        "/workspace/ink-heroes-store/screenshots/phone/03-menu-adventure-1920x1080.png",
+        "/workspace/ink-heroes-store/screenshots/phone/05-katana-fight-1920x1080.png",
+        "/workspace/ink-heroes-store/screenshots/phone/08-boss-homework-finisher-1920x1080.png",
+    ],
+    "stick-city-z": [
+        "/workspace/stick-city-z-store-kit/phone-screenshots/01-heroes.png",
+        "/workspace/stick-city-z-store-kit/phone-screenshots/02-combat.png",
+        "/workspace/stick-city-z-store-kit/phone-screenshots/04-drive.png",
+    ],
 }
 
 
 def cover(im, size):
-    """Scale + centre-crop to fill size exactly."""
     tw, th = size
     w, h = im.size
     s = max(tw / w, th / h)
@@ -38,40 +110,46 @@ def cover(im, size):
     return im.crop((l, t, l + tw, t + th))
 
 
-def icon(src, dst):
+def save_icon(src, dst):
     im = Image.open(src).convert("RGBA")
-    if "mipmap" in src:  # launcher icon has rounded transparent corners: trim to the art
-        bbox = im.getchannel("A").getbbox()
-        im = im.crop(bbox)
-        w, h = im.size
-        inset = round(w * 0.025)  # drop the rounded corners
-        im = im.crop((inset, inset, w - inset, h - inset))
-    im = cover(im.convert("RGB"), (256, 256))
-    im.save(dst, "WEBP", quality=88, method=6)
+    # Flatten onto white if there is transparency, then cover to 512.
+    bg = Image.new("RGB", im.size, (255, 255, 255))
+    bg.paste(im, mask=im.split()[-1])
+    cover(bg, (ICON_SIZE, ICON_SIZE)).save(dst, "WEBP", quality=88, method=6)
 
 
-def banner(src, dst, box):
+def save_banner(src, dst):
     im = Image.open(src).convert("RGB")
-    if box:
-        im = im.crop(box)
     cover(im, BANNER).save(dst, "WEBP", quality=82, method=6)
 
 
-for slug, (ic, bn, box) in SOURCES.items():
-    icon(os.path.join(GAMES, ic), os.path.join(OUT, f"{slug}-icon.webp"))
-    banner(os.path.join(GAMES, bn), os.path.join(OUT, f"{slug}-banner.webp"), box)
-    print("ok", slug)
+def save_shot(src, dst):
+    im = Image.open(src).convert("RGB")
+    w, h = im.size
+    long_edge = max(w, h)
+    if long_edge > SHOT_LONG:
+        s = SHOT_LONG / long_edge
+        im = im.resize((round(w * s), round(h * s)), Image.LANCZOS)
+    im.save(dst, "WEBP", quality=80, method=6)
+    return im.size
 
-# Studio logo + social preview + favicons
-logo = Image.open(os.path.join(GAMES, "_Studio Assets/Tiny Tap Kids Intro/ttk-logo-intro/logo_final_transparent.png")).convert("RGBA")
-logo = logo.crop(logo.getchannel("A").getbbox())
-l = logo.copy(); l.thumbnail((640, 640), Image.LANCZOS); l.save(os.path.join(OUT, "logo.webp"), "WEBP", quality=90, method=6)
-l = logo.copy(); l.thumbnail((640, 640), Image.LANCZOS); l.save(os.path.join(OUT, "logo.png"), optimize=True)
 
-dev = Image.open(os.path.join(GAMES, "_Studio Assets/Play Developer Profile/developer_icon_512.png")).convert("RGB")
-for s in (32, 180, 512):
-    dev.resize((s, s), Image.LANCZOS).save(os.path.join(SITE, f"favicon-{s}.png"), optimize=True)
+def main():
+    for slug, (ic, bn) in ICONS_BANNERS.items():
+        if ic:
+            dst = os.path.join(OUT, f"{slug}-icon.webp")
+            save_icon(ic, dst)
+            print("icon ", slug, os.path.getsize(dst))
+        if bn:
+            dst = os.path.join(OUT, f"{slug}-banner.webp")
+            save_banner(bn, dst)
+            print("banner", slug, os.path.getsize(dst))
+    for slug, paths in SCREENSHOTS.items():
+        for i, src in enumerate(paths, 1):
+            dst = os.path.join(SHOTS, f"{slug}-{i}.webp")
+            size = save_shot(src, dst)
+            print("shot ", f"{slug}-{i}", size, os.path.getsize(dst))
 
-hdr = Image.open(os.path.join(GAMES, "_Studio Assets/Play Developer Profile/header_4096x2304.jpg")).convert("RGB")
-cover(hdr, (1200, 630)).save(os.path.join(OUT, "social.jpg"), quality=85, optimize=True)
-print("ok studio")
+
+if __name__ == "__main__":
+    main()

@@ -26,34 +26,55 @@ YEAR = 2026
 PLAY = "https://play.google.com/store/apps/details?id={}"
 
 # status: live | testing | dev     audience: kids | teen | None
+# shots: number of WebP screenshots in img/shots/<slug>-N.webp (0 if none yet).
+# Privacy page wording is maintained by hand under /privacy/<slug>/; do not
+# regenerate those files from this script unless a policy itself has changed.
 GAMES = [
     dict(slug="kaiju-rampage", name="Kaiju Rampage", pkg="com.tinytapkids.kaijurampage", status="live", audience="teen",
          tags=["Free with ads", "Optional purchases"],
-         desc="Stomp the city, survive the army and beat giant bosses. Become the kaiju! A one-thumb monster roguelite with upgrades, new monsters and a Titan Mech to topple."),
+         desc="Stomp the city, survive the army and beat giant bosses. Become the kaiju! A one-thumb monster roguelite with upgrades, new monsters and a Titan Mech to topple.",
+         shots=3, shot_orient="portrait",
+         shot_alts=["Becoming the kaiju and stomping the city", "Fighting a giant boss", "Smashing the army in the city streets"]),
     dict(slug="brick-blast-rocket", name="Brick Blast Rocket", pkg="com.tinytapkids.brickblast", status="live", audience="teen",
          tags=["Free with ads"],
-         desc="Aim, shoot and smash candy bricks in space! A rocket-powered brick breaker with 4 worlds, 42 levels, boss battles, Endless mode and a Daily Challenge."),
+         desc="Aim, shoot and smash candy bricks in space! A rocket-powered brick breaker with 4 worlds, 42 levels, boss battles, Endless mode and a Daily Challenge.",
+         shots=3, shot_orient="portrait",
+         shot_alts=["Aiming and shooting at candy bricks", "A wingman helping clear a level", "The world map with four worlds to play"]),
     dict(slug="kids-fun-games", name="Kids Fun Games", pkg="com.tinytapkids.kidsgames", status="live", audience="kids",
-         tags=["No ads", "Parent-locked unlock"],
-         desc="13 fun games in one app for little ones: dig and build, wash things clean, play with 3D toy trains, feed the monster, splash in a bubble bath, build words, fill a UFO sticker book, draw and trace."),
+         tags=["No ads", "Optional contribution"],
+         desc="13 fun games in one app for little ones: dig and build, wash things clean, play with 3D toy trains, feed the monster, splash in a bubble bath, build words, fill a UFO sticker book, draw and trace. Every game is open to everyone.",
+         shots=3, shot_orient="portrait",
+         shot_alts=["The Kids Fun Games home screen, with every game unlocked",
+                    "Dig and Build, a 3D sandbox for little kids",
+                    "Driving 3D toy trains"]),
     dict(slug="dino-smash-city", name="Dino Smash City", pkg="com.tinytapkids.dinosmash", status="live", audience="kids",
-         tags=["No ads", "Parent-locked unlock"],
-         desc="Go GIANT! Stomp around a toy city as a friendly dino: kick, grab, go bowling, pop barrels, dress up your dinos and collect stickers."),
+         tags=["No ads", "Optional contribution"],
+         desc="Go GIANT! Stomp around a toy city as a friendly dino: kick, grab, go bowling, pop barrels, dress up your dinos and collect stickers.",
+         shots=3, shot_orient="landscape",
+         shot_alts=["Kicking a stack of crates as a T. rex", "Going giant in the toy city", "Dressing up the dinos"]),
     dict(slug="christmas-town-fun", name="Christmas Town Fun", pkg="com.tinytapkids.christmastownfun", status="testing", audience="kids",
          tags=["No ads", "Advent calendar"],
-         desc="22 cozy Christmas games for kids in one snowy town: sleigh rides, snowball fun, gingerbread, cookies, tree decorating and an advent calendar to open every day."),
+         desc="22 cozy Christmas games for kids in one snowy town: sleigh rides, snowball fun, gingerbread, cookies, tree decorating and an advent calendar to open every day.",
+         shots=3, shot_orient="landscape",
+         shot_alts=["Christmas Town Fun title art", "Riding Santa's sleigh over a snowy town", "More than 20 holiday games in one town"]),
     dict(slug="deep-glow", name="Deep Glow", pkg="com.tinytapkids.deepglow", status="testing", audience="teen",
          tags=["Free with ads", "Leaderboards"],
          desc="Guide a glowing jellyfish into the abyss. Your light is your life: collect pearls, dodge the dark and dive deeper every time."),
     dict(slug="fudders-ngmi", name="Fudders NGMI", pkg="com.tinytapkids.fuddersngmi", status="testing", audience=None,
          tags=["3 games, 1 universe"],
-         desc="Play as the Fudders, a crew of lovable losers, and survive the Hype Army across a bull-market city. Three games, one universe."),
+         desc="Play as the Fudders, a crew of lovable losers, and survive the Hype Army across a bull-market city. Three games, one universe.",
+         shots=3, shot_orient="portrait",
+         shot_alts=["The Fudders hub with Crybaby ready to play", "Crybaby flooding the street with tears", "The Diamond Hands Colossus boss fight"]),
     dict(slug="ink-heroes", name="Ink Heroes", pkg="com.tinytapkids.inkheroes", status="dev", audience=None,
          tags=["8 heroes", "300 pages", "Endless mode"],
-         desc="Sketchbook heroes vs. the ink spill! Swap between eight doodled heroes on the fly to cross 300 notebook pages, then keep going in Endless mode."),
-    dict(slug="stick-city-z", name="Stick City Z", pkg="com.tinytapkids.stickcityz", status="dev", audience=None,
-         tags=["3D action"],
-         desc="A stickman zombie town: climb buildings, leap across rooftops, drive through the horde and smash it with cartoon ink-splat action."),
+         desc="Sketchbook heroes vs. the ink spill! Swap between eight doodled heroes on the fly to cross 300 notebook pages, then keep going in Endless mode.",
+         shots=3, shot_orient="landscape",
+         shot_alts=["Picking a chapter on the Ink Heroes adventure map", "A katana fight across a homework page", "A homework boss finisher"]),
+    dict(slug="stick-city-z", name="Stick City Z: Zombie Heroes", pkg="com.tinytapkids.stickcityz", status="dev", audience="teen",
+         tags=["Free with ads"],
+         desc="Stickman heroes vs. a zombie city: smash the horde, drive, glide and topple giants. Climb buildings, leap across rooftops and smash it with cartoon ink-splat action.",
+         shots=3, shot_orient="landscape",
+         shot_alts=["Choosing a stickman hero", "Fighting zombies in the city streets", "Driving through the horde"]),
 ]
 
 STATUS_LABEL = {"testing": "In testing", "dev": "In development"}
@@ -144,6 +165,31 @@ def play_button(g):
             f'<span><small>Coming soon to</small><strong>Google Play</strong></span></span>')
 
 
+# Slugs that already have a /privacy/<slug>/ page. Keep this in sync with
+# the files on disk; do not use it to rewrite those pages.
+PRIVACY_PAGES = {
+    "kaiju-rampage", "brick-blast-rocket", "kids-fun-games", "dino-smash-city",
+    "christmas-town-fun", "deep-glow", "ink-heroes", "stick-city-z",
+}
+
+
+def shots_html(g):
+    n = int(g.get("shots") or 0)
+    if n <= 0:
+        return ""
+    orient = g.get("shot_orient") or "landscape"
+    w, h = (608, 1080) if orient == "portrait" else (1080, 608)
+    alts = list(g.get("shot_alts") or [])
+    imgs = []
+    for i in range(1, n + 1):
+        alt = alts[i - 1] if i - 1 < len(alts) else f"{g['name']} screenshot {i}"
+        imgs.append(
+            f'<img src="img/shots/{g["slug"]}-{i}.webp" alt="{esc(alt)}" '
+            f'width="{w}" height="{h}" loading="eager" decoding="async">'
+        )
+    return f'          <div class="shots {orient}">{"".join(imgs)}</div>\n'
+
+
 def card(g):
     tags = []
     if g["status"] != "live":
@@ -153,16 +199,21 @@ def card(g):
         tags.append(f'<span class="tag {cls}">{label}</span>')
     tags += [f'<span class="tag">{esc(t)}</span>' for t in g["tags"]]
     policy = (f'<a class="small" href="privacy/{g["slug"]}/">Privacy policy</a>'
-              if g["slug"] in POLICY_SOURCES else '<span class="small">Privacy policy at launch</span>')
+              if g["slug"] in PRIVACY_PAGES else '<span class="small">Privacy policy at launch</span>')
+    banner = ""
+    if not g.get("shots"):
+        banner = (
+            f'        <img class="banner" src="img/{g["slug"]}-banner.webp" '
+            f'alt="{esc(g["name"])} artwork" width="1024" height="500" loading="eager">\n'
+        )
     return f"""      <article class="card" id="{g['slug']}">
-        <img class="banner" src="img/{g['slug']}-banner.webp" alt="{esc(g['name'])} artwork" width="1024" height="500" loading="lazy">
-        <div class="body">
+{banner}        <div class="body">
           <div class="title-row">
-            <img class="icon" src="img/{g['slug']}-icon.webp" alt="{esc(g['name'])} app icon" width="72" height="72" loading="lazy">
+            <img class="icon" src="img/{g['slug']}-icon.webp" alt="{esc(g['name'])} app icon" width="72" height="72" loading="eager">
             <h3>{esc(g['name'])}</h3>
           </div>
           <div class="tags">{''.join(tags)}</div>
-          <p>{esc(g['desc'])}</p>
+{shots_html(g)}          <p>{esc(g['desc'])}</p>
           <div class="actions">{play_button(g)}{policy}</div>
         </div>
       </article>"""
@@ -201,7 +252,7 @@ def build_index():
     </div>
 
     <h3 class="group-title"><span class="dot"></span>Out now on Google Play</h3>
-    <div class="grid four">
+    <div class="grid">
 {chr(10).join(card(g) for g in live)}
     </div>
 
@@ -224,7 +275,7 @@ def build_index():
         <div class="value"><span class="emoji" aria-hidden="true">🎮</span><div><h3>Real games for older players</h3><p>Monsters, brick breakers and deep-sea dives for teens and grown-ups, free to play with fair ads.</p></div></div>
       </div>
     </div>
-    <img class="heroes-art" src="img/ink-heroes-banner.webp" alt="The eight doodled heroes of Ink Heroes, drawn on notebook paper" width="1024" height="500" loading="lazy">
+    <img class="heroes-art" src="img/about-heroes.webp" alt="The eight doodled heroes of Ink Heroes, drawn on notebook paper" width="1024" height="500" loading="eager">
   </div>
 </section>
 
@@ -241,7 +292,7 @@ def build_index():
   </div>
 </section>"""
     return page(f"{STUDIO}: kid-friendly mobile games",
-                f"{STUDIO} makes bright, friendly Android games: Kids Fun Games, Dino Smash City, Kaiju Rampage, Brick Blast Rocket and more.",
+                f"{STUDIO} makes bright, friendly Android games: Kids Fun Games, Dino Smash City, Kaiju Rampage, Brick Blast Rocket, Ink Heroes, Stick City Z and more.",
                 body)
 
 
@@ -419,8 +470,13 @@ def build_misc():
 
 
 if __name__ == "__main__":
-    with open(os.path.join(SITE, "index.html"), "w", encoding="utf-8", newline="\n") as f:
-        f.write(build_index())
-    build_policies()
-    build_misc()
-    print("built index, privacy, 404, CNAME, robots, sitemap, app-ads.txt")
+    import sys
+    only = sys.argv[1] if len(sys.argv) > 1 else "all"
+    if only in ("all", "index"):
+        with open(os.path.join(SITE, "index.html"), "w", encoding="utf-8", newline="\n") as f:
+            f.write(build_index())
+        print("built index.html")
+    if only == "all":
+        build_policies()
+        build_misc()
+        print("built privacy, 404, CNAME, robots, sitemap, app-ads.txt")

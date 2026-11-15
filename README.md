@@ -16,9 +16,12 @@ The Tiny Tap Kids Studio website: plain static HTML with no build tools, cookies
 All pages are generated. Change `tools/build.py`, then run:
 
 ```
-python tools/build.py        # rebuild every HTML page
+python tools/build.py index  # rebuild only the home page (leaves privacy pages alone)
+python tools/build.py        # rebuild every HTML page, including privacy
 python tools/make_images.py  # only if game art changed (re-reads the game folders)
 ```
+
+Each game card on the home page shows the icon, two or three screenshots, a short description, a Google Play button (or a Coming soon label) and a link to that game's privacy page. Screenshot files live in `img/shots/`.
 
 - **When a game goes live**, change its `status` from `"testing"`/`"dev"` to `"live"` in `GAMES`. The "Coming soon" badge becomes a real Google Play button (`https://play.google.com/store/apps/details?id=<package>`), and the card moves to "Out now".
 - **New privacy policy** (e.g. Ink Heroes): add it to `POLICY_SOURCES`. Any email address or `*.github.io` link in the source is swapped automatically for `CONTACT` / the domain.
