@@ -88,6 +88,7 @@ POLICY_SOURCES = {
     "dino-smash-city": "Source/dino-smash/web/privacy.html",
     "christmas-town-fun": "Christmas Town Fun/store/privacy/index.html",
     "deep-glow": "Deep Glow/store/deepglow-privacy/index.html",
+    "fudders-ngmi": "Fudders NGMI iOS/privacy.txt",   # Android + iPhone/iPad
 }
 
 PLAY_SVG = ('<svg viewBox="0 0 24 26" aria-hidden="true"><path fill="#00d7fe" d="M1 1.2 13.6 13 1 24.8c-.4-.3-.6-.8-.6-1.4V2.6c0-.6.2-1.1.6-1.4z"/>'
