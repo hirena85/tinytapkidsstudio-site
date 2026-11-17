@@ -82,7 +82,7 @@ AUDIENCE_LABEL = {"kids": ("For kids", "kids"), "teen": ("Ages 13+", "teen")}
 
 # Existing per-app policies (relative to the GPlay Games folder) -> republished at /privacy/<slug>/
 POLICY_SOURCES = {
-    "kaiju-rampage": "Kaiju-rampage-1.0.2 source/kaiju-rampage-1.0.2-source-art-store/store/privacy-policy.txt",
+    "kaiju-rampage": "Kaiju Rampage iOS/privacy-1.1.0.txt",   # 1.1.0 + iPhone/iPad (repo kaiju-rampage, branch ios)
     "brick-blast-rocket": "Brick Blast/brick-blast-privacy-policy.txt",
     "kids-fun-games": "Kids Fun Games 1.9/privacy-1.9.txt",
     "dino-smash-city": "Source/dino-smash/web/privacy.html",
@@ -396,7 +396,7 @@ def build_policies():
         d = os.path.join(SITE, "privacy", slug)
         os.makedirs(d, exist_ok=True)
         with open(os.path.join(d, "index.html"), "w", encoding="utf-8", newline="\n") as f:
-            f.write(page(f"{g['name']} privacy policy · {STUDIO}", f"Privacy policy for the {g['name']} Android app by {STUDIO}.",
+            f.write(page(f"{g['name']} privacy policy · {STUDIO}", f"Privacy policy for the {g['name']} app by {STUDIO}.",
                          body, depth=2, canonical=f"privacy/{slug}/"))
         print("policy", slug, "<-", title)
 
